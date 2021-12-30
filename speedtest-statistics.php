@@ -121,8 +121,8 @@ else {
 	$tz=exec('date +"%Z"',$tz);
 
 	// Limit the query to the last 48 sample as we collect data every 30 minutes from two servers.
-	# $sql = 'SELECT serverid,  strftime("%H:%M-'.$tz.'", times, "localtime") || " " || strftime("%Y-%m-%d", times) AS timestamp, sponsor, servername, download, upload  from (select * FROM bandwidth WHERE serverid='.$serverid.' ORDER BY times DESC LIMIT 48) ORDER BY times ASC;';
-	$sql = 'SELECT serverid,  strftime("%H:%M-'.$tz.'", times, "localtime") || " " || strftime("%Y-%m-%d", times) AS timestamp, sponsor, servername, download, upload from (select * FROM bandwidth WHERE serverid='.$serverid.' ORDER BY times DESC LIMIT 48 OFFSET '.$offset.' ) ORDER BY times ASC;';
+	# $sql = 'SELECT serverid,  strftime("%H:%M-'.$tz.'", times, "localtime") || " " || strftime("%Y-%m-%d", times) AS timestamp, servername, download, upload  from (select * FROM bandwidth WHERE serverid='.$serverid.' ORDER BY times DESC LIMIT 48) ORDER BY times ASC;';
+	$sql = 'SELECT serverid,  strftime("%H:%M-'.$tz.'", times, "localtime") || " " || strftime("%Y-%m-%d", times) AS timestamp, servername, download, upload from (select * FROM bandwidth WHERE serverid='.$serverid.' ORDER BY times DESC LIMIT 48 OFFSET '.$offset.' ) ORDER BY times ASC;';
 
 	// Execute and return error if unsuccessful
 	$ret = $db->query($sql);
@@ -194,7 +194,7 @@ else {
 
 	// Build the query to get a list of servers stored in the database. Note that the database should be 
 	// cleaned up from time to time to not get too bloated
-        $sql2 = 'SELECT DISTINCT serverid, sponsor, servername FROM bandwidth';
+        $sql2 = 'SELECT DISTINCT serverid, servername FROM bandwidth';
 	$ret = $db->query($sql2);
         if(!$ret){
                 echo $db->lastErrorMsg();
