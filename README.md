@@ -43,7 +43,7 @@ Customize and install the shellscript speedtest-collector.sh to a handy place of
 The following will get you the list of servers, sorted reverse by distance.
 
 ```bash
-speedtest --list|tac
+speedtest -L |tac
 ```
 Pick two servers , one should be in the same AS (autonomous system) as your provider, if possible. The other one should be one not too far away.
 My output looks as following:
@@ -59,30 +59,22 @@ Retrieving speedtest.net configuration...
 
 I was picking numbers 19035 (Provider Network) and 1475 (Shortest distance)
 
-Look for the section "Main - Run the tests customize your servers here"
+edit the servers.csv file accordingly.
 
 I added the following:
 
-```bash
-runTest "19035"
-sleep 10
-
-runTest "1475"
+```csv
+# Server ID, Server name
+19035, Vodafone Kabel Deutschland - Berlin - Germany
+1475, IPB GmbH - Berlin - Germany
 ```
 
-Put the same values in the function getCSVString
-
+This file is not really used as CSV. It is only read by the shell script, feel free to comment out lines with "#".
 
 ## Create the database
 
 ```bash
-sqlite3 /var/www/html/speedtest-collector.db
-```
-
-Populate the DB with a table
-
-```SQL
-CREATE TABLE IF NOT EXISTS "bandwidth" ("serverid" INTEGER NOT NULL , "sponsor" VARCHAR NOT NULL , "servername" VARCHAR NOT NULL , "times" DATETIME PRIMARY KEY NOT NULL UNIQUE , "distance" FLOAT NOT NULL , "ping" FLOAT NOT NULL , "download" FLOAT NOT NULL , "upload" FLOAT NOT NULL );
+sqlite3 /var/www/html/speedtest-collector.db < create.sql
 ```
 
 ## Create the crontab
